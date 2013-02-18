@@ -9,9 +9,10 @@ Author URI: http://www.markadvertising.com
 */
 
 
-
 /*
 	Add settings link to plubin page
+	
+	No currently used, but intented for future modifications
 */
 //add_filter( 'plugin_row_meta', 'set_markad_lightbox_plugin_meta', 10, 2 );
 function set_markad_lightbox_plugin_meta($links, $file) {
@@ -45,7 +46,9 @@ function markad_lightbox_plugin_init()
 }
 
 
-//Thickbox Lightbox for wordpress
+/*
+	Add filter for "the content" to add Thickbox Lightbox for wordpress
+*/ 
 add_filter('the_content', 'markad_add_thickbox_lightbox', 2);
 function markad_add_thickbox_lightbox($content)
 {
@@ -58,9 +61,8 @@ function markad_add_thickbox_lightbox($content)
 	{
 		$pos = strpos($val[5], '"');
 		$post_id = intval(substr($val[5],0,$pos));
-		//$alt = get_post_meta($post_id, '_wp_attachment_image_alt', true);
+
 		$alt = get_posts(array('p' => $post_id, 'post_type' => 'attachment'));
-		//$alt = $alt[0]->post_excerpt;
 		$alt = $alt[0]->post_title;
 		$img_url = wp_get_attachment_image_src( $post_id, 'large' );
 
@@ -73,11 +75,14 @@ function markad_add_thickbox_lightbox($content)
 	return $content;
 }
 
-//Replace post thumbnail link with large image link
+
+/*
+	Replace post thumbnail link with large image link
+*/
 add_filter('wp_get_attachment_link', 'markad_attachment_link_filter', 10, 4);
 function markad_attachment_link_filter( $content, $post_id, $size, $permalink ) {
     // Only do this if we're getting the file URL
-    if (! $permalink) {
+    if (!$permalink) {
 		$post = get_post($post_id);
 		$post_parent = $post->post_parent;
         $image = wp_get_attachment_image_src( $post_id, 'large' );
